@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block description %}
+Capture priorities as they happen. Keep action items crisp and specific.
+{% endblock %}
+
+{% block main %}
+<div class="page-container">
+  <div class="form-card-wrapper">
+    <div class="material-card">
+      <div class="card-header-block">
+        <div class="editorial-eyebrow">
+          <span class="material-symbols-rounded" style="font-size: 1rem;">add_task</span>
+          <span>New Entry</span>
+        </div>
+        <h2>Capture what's next.</h2>
+        <p>State the action clearly. Once it's recorded, you can get back to doing.</p>
+      </div>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="m3-banner {% if 'successfully' in messages[0] %}success{% else %}error{% endif %}">
+            <span class="material-symbols-rounded">
+              {% if 'successfully' in messages[0] %}check_circle{% else %}error{% endif %}
+            </span>
+            <span>{{ messages[0] }}</span>
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="/add" method="post">
+        <div class="m3-field-group">
+          <div class="m3-text-field">
+            <label for="task" class="m3-field-label">
+              <span class="material-symbols-rounded" style="font-size: 1rem;">label</span>
+              <span>Task description</span>
+            </label>
+            <div class="m3-input-wrapper">
+              <span class="material-symbols-rounded leading-icon">edit_note</span>
+              <input
+                type="text"
+                name="task"
+                id="task"
+                class="m3-input"
+                placeholder="What needs to be done?"
+                required
+                autofocus
+              />
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 1rem;">
+          <a href="/home" class="btn-tonal">
+            <span class="material-symbols-rounded">arrow_back</span>
+            <span>Back to tasks</span>
+          </a>
+          <button type="submit" class="btn-primary">
+            <span class="material-symbols-rounded">save</span>
+            <span>Save task</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

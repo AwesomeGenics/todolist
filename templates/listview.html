@@ -1,0 +1,230 @@
+{% extends 'base.html' %}
+
+{% block description %}
+A calm, deliberate workspace designed to eliminate clutter and keep momentum.
+{% endblock %}
+
+{% block main %}
+<div class="page-container">
+  <!-- Asymmetric Editorial Grid (Replaces repetitive 3-column card grids) -->
+  <div class="asymmetric-grid">
+    <!-- Editorial Column: High typography hierarchy, intentional brand voice, whitespace -->
+    <aside class="editorial-sidebar">
+      <div class="editorial-voice-card">
+        <div class="editorial-eyebrow">
+          <span class="material-symbols-rounded" style="font-size: 1rem;">spa</span>
+          <span>Daily Flow</span>
+        </div>
+        <h2 class="editorial-voice-title">
+          {% if name %}
+            {{ name }}'s Workspace
+          {% else %}
+            Focused Action
+          {% endif %}
+        </h2>
+        <p class="editorial-voice-text">
+          Eliminate mental friction. Track what matters today, archive what is finished, and keep your attention undivided.
+        </p>
+
+        <!-- Editorial Metric Row (Clean asymmetrical pills instead of numbered 01/02/03 boxes) -->
+        <div class="editorial-metric-row">
+          <div class="editorial-metric-pill">
+            <div class="metric-num">{{ tasksaslist|length }}</div>
+            <div class="metric-label">In Progress</div>
+          </div>
+          <div class="editorial-metric-pill">
+            <div class="metric-num">{{ donetasks|length }}</div>
+            <div class="metric-label">Completed</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="padding: 0 0.5rem;">
+        <a href="/add" class="btn-primary" style="width: 100%; justify-content: center;">
+          <span class="material-symbols-rounded">add</span>
+          <span>Create New Task</span>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Main Tasks Surface (Clean Material 3 Container, no nested borders) -->
+    <section class="tasks-surface">
+      <!-- M3 Segmented Control -->
+      <div class="m3-segmented-control" role="tablist">
+        <button
+          type="button"
+          class="m3-segment-btn active tab-btn"
+          data-target="pending"
+          role="tab"
+          aria-selected="true"
+        >
+          <span class="material-symbols-rounded" style="font-size: 1.15rem;">schedule</span>
+          <span>Pending</span>
+          <span class="badge">{{ tasksaslist|length }}</span>
+        </button>
+        <button
+          type="button"
+          class="m3-segment-btn tab-btn"
+          data-target="completed"
+          role="tab"
+          aria-selected="false"
+        >
+          <span class="material-symbols-rounded" style="font-size: 1.15rem;">check_circle</span>
+          <span>Completed</span>
+          <span class="badge">{{ donetasks|length }}</span>
+        </button>
+      </div>
+
+      <!-- Pending Tasks Panel -->
+      <div class="panel" id="panel-pending" role="tabpanel">
+        <ul class="task-items-list" id="task-list">
+          {% for num, task, owner_name in tasksaslist %}
+          <li class="task-item">
+            <form action="/delete/{{ num }}" method="post" class="check-action-form">
+              <button
+                type="submit"
+                name="delete"
+                value="delete"
+                class="check-trigger-btn"
+                aria-label="Mark task as complete"
+                title="Mark as complete"
+              >
+                <span class="material-symbols-rounded">radio_button_unchecked</span>
+              </button>
+            </form>
+
+            <div class="task-content-wrap">
+              <span class="task-title">{{ task }}</span>
+            </div>
+
+            <div class="task-actions">
+              <form action="/delete/{{ num }}" method="post" class="check-action-form">
+                <button
+                  type="submit"
+                  name="delete"
+                  value="delete"
+                  class="icon-button"
+                  aria-label="Complete task"
+                  title="Complete task"
+                >
+                  <span class="material-symbols-rounded">done</span>
+                </button>
+              </form>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="empty-msg" hidden>
+          <div class="empty-state-icon">
+            <span class="material-symbols-rounded">done_all</span>
+          </div>
+          <h3 class="empty-state-title">Clear decks.</h3>
+          <p class="empty-state-text">
+            No pending tasks right now. Enjoy the open space or add what's coming up next.
+          </p>
+          <a href="/add" class="btn-tonal">
+            <span class="material-symbols-rounded">add</span>
+            <span>Add a task</span>
+          </a>
+        </div>
+
+        <!-- Footer Actions Bar -->
+        <div class="surface-footer-bar">
+          <form action="/home" method="post" id="clear-form">
+            <button type="submit" class="btn-text-danger">
+              <span class="material-symbols-rounded">delete_sweep</span>
+              <span>Clear active tasks</span>
+            </button>
+          </form>
+
+          <a href="/add" class="btn-tonal">
+            <span class="material-symbols-rounded">add</span>
+            <span>Quick add</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Completed Tasks Panel -->
+      <div class="panel" id="panel-completed" role="tabpanel" hidden>
+        <ul class="task-items-list" id="completed-list">
+          {% for owner, task_name in donetasks %}
+          <li class="task-item completed">
+            <div class="completed-marker">
+              <span class="material-symbols-rounded filled">check_circle</span>
+            </div>
+            <div class="task-content-wrap">
+              <span class="task-title">{{ task_name }}</span>
+            </div>
+          </li>
+          {% endfor %}
+        </ul>
+
+        <!-- Completed Empty State -->
+        <div class="empty-state" id="completed-empty-msg" hidden>
+          <div class="empty-state-icon">
+            <span class="material-symbols-rounded">inventory_2</span>
+          </div>
+          <h3 class="empty-state-title">Archive is empty.</h3>
+          <p class="empty-state-text">
+            Tasks completed during your sessions will be preserved here for reference.
+          </p>
+        </div>
+
+        <!-- Footer Actions Bar for Completed -->
+        <div class="surface-footer-bar">
+          <form action="/home_done" method="post" id="clear-form-done">
+            <button type="submit" class="btn-text-danger">
+              <span class="material-symbols-rounded">delete_outline</span>
+              <span>Clear completed history</span>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var pendingList = document.getElementById("task-list");
+    var completedList = document.getElementById("completed-list");
+    var clearForm = document.getElementById("clear-form");
+    var clearFormDone = document.getElementById("clear-form-done");
+    var pendingEmptyMsg = document.getElementById("empty-msg");
+    var completedEmptyMsg = document.getElementById("completed-empty-msg");
+
+    var hasPending = pendingList && pendingList.children.length > 0;
+    if (clearForm) clearForm.hidden = !hasPending;
+    if (pendingEmptyMsg) pendingEmptyMsg.hidden = hasPending;
+
+    var hasCompleted = completedList && completedList.children.length > 0;
+    if (clearFormDone) clearFormDone.hidden = !hasCompleted;
+    if (completedEmptyMsg) completedEmptyMsg.hidden = hasCompleted;
+
+    var tabs = document.querySelectorAll(".tab-btn");
+    var panels = {
+      pending: document.getElementById("panel-pending"),
+      completed: document.getElementById("panel-completed"),
+    };
+
+    tabs.forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        tabs.forEach(function (b) {
+          b.classList.remove("active");
+          b.setAttribute("aria-selected", "false");
+        });
+        btn.classList.add("active");
+        btn.setAttribute("aria-selected", "true");
+
+        Object.keys(panels).forEach(function (key) {
+          if (panels[key]) {
+            panels[key].hidden = key !== btn.dataset.target;
+          }
+        });
+      });
+    });
+  })();
+</script>
+{% endblock %}

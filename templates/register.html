@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+
+{% block description %}
+Create your account to start managing tasks in a clean, distraction-free environment.
+{% endblock %}
+
+{% block main %}
+<div class="page-container">
+  <div class="form-card-wrapper">
+    <div class="material-card">
+      <div class="card-header-block">
+        <div class="editorial-eyebrow">
+          <span class="material-symbols-rounded" style="font-size: 1rem;">person_add</span>
+          <span>Registration</span>
+        </div>
+        <h2>Create your space.</h2>
+        <p>Set up an account in moments. Your tasks will stay organized and private.</p>
+      </div>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="m3-banner error">
+            <span class="material-symbols-rounded">error</span>
+            <span>{{ messages[0] }}</span>
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="/register" method="post">
+        <div class="m3-field-group">
+          <div class="m3-text-field">
+            <label for="name" class="m3-field-label">
+              <span class="material-symbols-rounded" style="font-size: 1rem;">badge</span>
+              <span>Username</span>
+            </label>
+            <div class="m3-input-wrapper">
+              <span class="material-symbols-rounded leading-icon">person</span>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="m3-input"
+                placeholder="Choose a username"
+                required
+                autofocus
+              />
+            </div>
+          </div>
+
+          <div class="m3-text-field">
+            <label for="email" class="m3-field-label">
+              <span class="material-symbols-rounded" style="font-size: 1rem;">alternate_email</span>
+              <span>Email address</span>
+            </label>
+            <div class="m3-input-wrapper">
+              <span class="material-symbols-rounded leading-icon">mail</span>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                class="m3-input"
+                placeholder="you@domain.com"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="m3-text-field">
+            <label for="pwd" class="m3-field-label">
+              <span class="material-symbols-rounded" style="font-size: 1rem;">key</span>
+              <span>Password</span>
+            </label>
+            <div class="m3-input-wrapper">
+              <span class="material-symbols-rounded leading-icon">lock</span>
+              <input
+                type="password"
+                id="pwd"
+                name="pwd"
+                class="m3-input"
+                placeholder="Create a secure password"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+          <span class="material-symbols-rounded">check</span>
+          <span>Create Account</span>
+        </button>
+      </form>
+
+      <p class="auth-switch-text">
+        Already registered?
+        <a href="/login">Sign in instead</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  var logout = document.getElementById("logout");
+  if (logout) {
+    logout.innerHTML = '<span class="material-symbols-rounded">login</span><span>Login</span>';
+    logout.setAttribute("href", "/login");
+  }
+</script>
+{% endblock %}

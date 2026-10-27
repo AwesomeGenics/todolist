@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block description %}
+Access your personal workspace and continue where you left off.
+{% endblock %}
+
+{% block main %}
+<div class="page-container">
+  <div class="form-card-wrapper">
+    <div class="material-card">
+      <div class="card-header-block">
+        <div class="editorial-eyebrow">
+          <span class="material-symbols-rounded" style="font-size: 1rem;">lock_open</span>
+          <span>Authentication</span>
+        </div>
+        <h2>Sign in to continue.</h2>
+        <p>Your tasks are waiting. Enter your credentials to access your board.</p>
+      </div>
+
+      {% with messages = get_flashed_messages() %}
+        {% if messages %}
+          <div class="m3-banner error">
+            <span class="material-symbols-rounded">error</span>
+            <span>{{ messages[0] }}</span>
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form action="/login" method="post">
+        <div class="m3-field-group">
+          <div class="m3-text-field">
+            <label for="name" class="m3-field-label">
+              <span class="material-symbols-rounded" style="font-size: 1rem;">person</span>
+              <span>Username</span>
+            </label>
+            <div class="m3-input-wrapper">
+              <span class="material-symbols-rounded leading-icon">account_circle</span>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                class="m3-input"
+                placeholder="Enter your username"
+                required
+                autofocus
+              />
+            </div>
+          </div>
+
+          <div class="m3-text-field">
+            <label for="pwd" class="m3-field-label">
+              <span class="material-symbols-rounded" style="font-size: 1rem;">key</span>
+              <span>Password</span>
+            </label>
+            <div class="m3-input-wrapper">
+              <span class="material-symbols-rounded leading-icon">lock</span>
+              <input
+                type="password"
+                id="pwd"
+                name="pwd"
+                class="m3-input"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn-primary" style="width: 100%; justify-content: center;">
+          <span class="material-symbols-rounded">login</span>
+          <span>Sign In</span>
+        </button>
+      </form>
+
+      <p class="auth-switch-text">
+        Need an account?
+        <a href="/register">Create one here</a>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  var logout = document.getElementById("logout");
+  if (logout) {
+    logout.hidden = true;
+  }
+</script>
+{% endblock %}
