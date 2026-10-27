@@ -41,7 +41,8 @@ trying_todolist/
 │   ├── login.html       # Outlined credential sign-in card
 │   ├── newtask.html     # Single-focus task creation card
 │   └── register.html    # Outlined registration card
-├── app.py               # Main Flask application entry point
+├── main.py              # Main Flask application entry point
+├── .env                 # Environment configuration (SECRET_KEY)
 ├── tasks.db             # SQLite database storing users and owner tasks
 ├── requirements.txt     # Python dependencies
 └── README.md
@@ -75,11 +76,19 @@ pip install -r requirements.txt
 - `Flask`
 - `Flask-Session`
 - `Werkzeug`
+- `python-dotenv`
+- `gunicorn`
 
 ### 4. Run the Application
 
+**Development Server:**
 ```bash
-python3 app.py
+python3 main.py
+```
+
+**Production with Gunicorn:**
+```bash
+gunicorn -w 4 -b 0.0.0.0:5000 main:app
 ```
 
 The application will start on `http://0.0.0.0:5000` (or `http://127.0.0.1:5000`).
